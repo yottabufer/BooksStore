@@ -126,6 +126,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django REST framework
 # https://www.django-rest-framework.org/
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -139,7 +140,6 @@ REST_FRAMEWORK = {
 # https://python-social-auth.readthedocs.io/en/latest/configuration/django.html
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
-
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
