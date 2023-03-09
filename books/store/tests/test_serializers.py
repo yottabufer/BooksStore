@@ -1,22 +1,42 @@
+from django.db.models import Count, Case, When
 from django.test import TestCase
 from store.serializers import BooksSerializer
-from store.models import Book
+from store.models import Book, UserBookRelation
 from django.contrib.auth.models import User
 
 
 class BookSerializersTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username='test_username')
-        self.book1 = Book.objects.create(name='Book1', price=11, author_name='author1', owner=self.user)
+        self.user1 = User.objects.create(username='user1')
+        self.user2 = User.objects.create(username='user2')
+        self.book1 = Book.objects.create(name='Book1', price=11, author_name='author1')
+        self.book2 = Book.objects.create(name='Book2', price=22, author_name='author2')
+
+        UserBookRelation.objects.create(user=self.user1, book=self.book1, like=True)
+        UserBookRelation.objects.create(user=self.user2, book=self.book1, like=False)
 
     def test_ok(self):
-        serializer_data = BooksSerializer(self.book1).data
-        expected_data = {
-            'id': self.book1.id,
-            'name': 'Book1',
-            'price': 11,
-            'author_name': 'author1',
-            'owner': self.user.pk,
-            'readers': [],
-        }
-        self.assertEqual(expected_data, serializer_data)
+        books = Book.objects.all().annotate(
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1)))).order_by('pk')
+        data = BooksSerializer(books, many=True).data
+
+        expected_data = [
+            {
+                'pk': self.book1.pk,
+                'name': 'Book1',
+                'price': 11,
+                'author_name': 'author1',
+                'likes_count': 1,
+                'annotated_likes': 1,
+            },
+            {
+                'pk': self.book2.pk,
+                'name': 'Book2',
+                'price': 22,
+                'author_name': 'author2',
+                'likes_count': 0,
+                'annotated_likes': 0,
+            },
+
+        ]
+        self.assertEqual(expected_data, data)

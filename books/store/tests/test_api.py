@@ -1,5 +1,5 @@
 import json
-
+from django.db.models import Count, Case, When
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 from django.urls import reverse
@@ -15,27 +15,33 @@ class BookApiTestCase(APITestCase):
 
         self.book1 = Book.objects.create(name='Book1', price=11, author_name='author1', owner=self.user)
         self.book2 = Book.objects.create(name='Book2', price=22, author_name='author1')
-        self.book3 = Book.objects.create(name='Book3', price=33, author_name='Book1 author2')
+        self.book3 = Book.objects.create(name='Book3', price=22, author_name='Book1 author2')
 
     def test_get(self):
         url = reverse('book-list')
         response = self.client.get(url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        serializer_data = BooksSerializer([self.book1, self.book2, self.book3], many=True).data
+        books = Book.objects.all().annotate(
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))))
+        serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(serializer_data, response.data)
 
     def test_get_filter(self):
         url = reverse('book-list')
-        response = self.client.get(url, data={'price': '33'})
+        books = Book.objects.filter(pk__in=[self.book2.pk, self.book3.pk]).annotate(
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))))
+        response = self.client.get(url, data={'price': 22})
+        serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        serializer_data = BooksSerializer([self.book3], many=True).data
         self.assertEqual(serializer_data, response.data)
 
     def test_get_search(self):
         url = reverse('book-list')
+        books = Book.objects.filter(pk__in=[self.book1.pk, self.book3.pk]).annotate(
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))))
         response = self.client.get(url, data={'search': 'Book1'})
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        serializer_data = BooksSerializer([self.book1, self.book3], many=True).data
+        serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(serializer_data, response.data)
 
     def test_create(self):
