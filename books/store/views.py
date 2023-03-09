@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from store.models import Book, UserBookRelation
 from store.permissoins import IsOwnerOrStaffOrReadOnly
-from store.serializers import BooksSerializer
+from store.serializers import BooksSerializer, UserBookRelationSerializer
 
 
 class BookViewSet(ModelViewSet):
@@ -24,8 +24,15 @@ class BookViewSet(ModelViewSet):
 
 
 class UserBookRelationView(UpdateModelMixin, GenericViewSet):
-    permission_classes = (IsAuthenticated,)
     queryset = UserBookRelation.objects.all()
+    serializer_class = UserBookRelationSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = 'book'
+
+    def get_object(self):
+        obj, created = UserBookRelation.objects.get_or_create(user=self.request.user, book_id=self.kwargs['book'])
+        # print('created', created)
+        return obj
 
 
 def auth(request):

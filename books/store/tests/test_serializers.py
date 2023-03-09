@@ -9,7 +9,6 @@ class BookSerializersTestCase(TestCase):
         self.user = User.objects.create(username='test_username')
         self.book1 = Book.objects.create(name='Book1', price=11, author_name='author1', owner=self.user)
 
-
     def test_ok(self):
         serializer_data = BooksSerializer(self.book1).data
         expected_data = {
@@ -18,5 +17,6 @@ class BookSerializersTestCase(TestCase):
             'price': 11,
             'author_name': 'author1',
             'owner': self.user.pk,
+            'readers': [],
         }
-        self.assertEqual(expected_data, serializer_data)  # TODO
+        self.assertEqual(expected_data, serializer_data)
