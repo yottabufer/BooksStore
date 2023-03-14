@@ -4,7 +4,7 @@ from store.models import Book, UserBookRelation
 
 @admin.register(Book)
 class AdminBooks(admin.ModelAdmin):
-    fields = ('name', 'price', 'author_name')
+    pass
 
 
 @admin.register(UserBookRelation)
