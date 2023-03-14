@@ -19,9 +19,7 @@ class BookSerializersTestCase(TestCase):
 
     def test_ok(self):
         books = Book.objects.all().annotate(
-            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
-            rating=Avg('userbookrelation__rate')
-        ).order_by('pk')
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1)))).order_by('pk')
         data = BooksSerializer(books, many=True).data
 
         expected_data = [
