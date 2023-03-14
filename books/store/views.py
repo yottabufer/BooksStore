@@ -7,11 +7,14 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from store.models import Book, UserBookRelation
 from store.permissoins import IsOwnerOrStaffOrReadOnly
 from store.serializers import BooksSerializer, UserBookRelationSerializer
-from django.db.models import Count, Case, When
+from django.db.models import Count, Case, When, Avg
 
 
 class BookViewSet(ModelViewSet):
-    queryset = Book.objects.all().annotate(annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))))
+    queryset = Book.objects.all().annotate(
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
+            rating=Avg('userbookrelation__rate')
+            ).order_by('pk')
     serializer_class = BooksSerializer
     permission_classes = (IsOwnerOrStaffOrReadOnly,)
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]

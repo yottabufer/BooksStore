@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'social_django',
+    'debug_toolbar',  # Django Debug Toolbar
 
     'store',
 ]
@@ -49,6 +50,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',  # Django Debug Toolbar
+    'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',  # django-debug-toolbar-force
+
 ]
 
 ROOT_URLCONF = 'books.urls'
@@ -146,3 +150,9 @@ AUTHENTICATION_BACKENDS = (
 )
 SOCIAL_AUTH_GITHUB_KEY = 'Iv1.d809e674ea0b6ef2'
 SOCIAL_AUTH_GITHUB_SECRET = '1ba00403bea1336d81b27c87fc59229e7ff1c078'
+
+# Django Debug Toolbar
+# https://django-debug-toolbar.readthedocs.io/en/latest/index.html
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
