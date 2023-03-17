@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'social_django',
+    'social_django',  # Python Social Auth
     'debug_toolbar',  # Django Debug Toolbar
 
     'store',
