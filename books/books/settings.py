@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'books.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'books_db',
-        'USER': 'books_user',
-        'PASSWORD': '123qwe',
+        'NAME': 'db_for_books',
+        'USER': 'user_for_books',
+        'PASSWORD': 'pass_books',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': 'port_books',
     }
 }
 
@@ -148,8 +148,8 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
-SOCIAL_AUTH_GITHUB_KEY = 'Iv1.d809e674ea0b6ef2'
-SOCIAL_AUTH_GITHUB_SECRET = '1ba00403bea1336d81b27c87fc59229e7ff1c078'
+SOCIAL_AUTH_GITHUB_KEY = 'MY_GIRHUB_KEY'
+SOCIAL_AUTH_GITHUB_SECRET = 'MY_GITHUB_SECRET'
 
 # Django Debug Toolbar
 # https://django-debug-toolbar.readthedocs.io/en/latest/index.html
