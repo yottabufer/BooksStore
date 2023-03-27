@@ -9,7 +9,7 @@
 ### Запуск
 1. Клонируем проект с репозитория
 ```python
-git clone https://github.com/yottabufer/spa_drf_nuxtJS_blog.git
+git clone https://github.com/yottabufer/BooksStore.git
 ```
 2. Переходим в папку созданную папку
 ```python
