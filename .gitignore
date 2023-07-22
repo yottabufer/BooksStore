@@ -1,5 +1,5 @@
 
-.idea/
+../.idea/
 
 # Created by https://www.gitignore.io/api/macos,linux,django,python,pycharm
 
@@ -154,9 +154,9 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
+books/htmlcov/
 .tox/
-.coverage
+books/.coverage
 .coverage.*
 .cache
 nosetests.xml
